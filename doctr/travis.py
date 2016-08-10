@@ -157,12 +157,12 @@ def setup_GitHub_push(deploy_repo, auth_type='deploy_key', full_key_path='github
     TRAVIS_PULL_REQUEST = os.environ.get("TRAVIS_PULL_REQUEST", "")
 
     if TRAVIS_BRANCH != "master":
-        print("The docs are only pushed {} from master".format('to' + branch if branch), file=sys.stderr)
+        print("The docs are only pushed {} from master".format('to' + branch if branch else branch), file=sys.stderr)
         print("This is the {TRAVIS_BRANCH} branch".format(TRAVIS_BRANCH=TRAVIS_BRANCH), file=sys.stderr)
         return False
 
     if TRAVIS_PULL_REQUEST != "false":
-        print("The website and docs are not pushed {} on pull requests".format('to' + branch if branch), file=sys.stderr)
+        print("The website and docs are not pushed {} on pull requests".format('to' + branch if branch else branch), file=sys.stderr)
         return False
 
     print("Setting git attributes")

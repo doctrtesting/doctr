@@ -6,8 +6,8 @@ env:
     - DOCS="true"
     - TESTS="true"
   global:
-    - secure: "lRNuFUVplsdD9P1g5ahPGT4sENcZ0Q5AB8iGm6/GWJ2QUoTZfbcPRTLj2XuYRK2Yi4QOoVSm/ZSxT2/GazvZNUUJxoIdclPTWjr5rRSRZrq1KOkipm3spyu9y5IuXwAeTykUzGnxijYJcdWeEQ5XyB6x+6AWtFmuTjkX35uXd8CH+ubYWmL/oqPwXgryuH47tnTT+AIpLSE9F4FTbvrM3RPwg4BBcSZ0qlieQKo21l0V1TvSIeTr8yK1F1HWQaOzBe2KFDHLVWv6kjw5I+ZXZIMRrhgFGYxJwdgIsNbZiKEpWo74XTb1Y+XYcXuh1erro5GkuOPsEUSvEPMiwYy58TS8G28h1sXidRO37EchsxSYJKymvSxz61AtLkuwhPtZNYehFt6kZWJpkd31KByEB8YlowvHotwFG7GxYjTBkAj98mRq87tFaTtYUFeY32rOlHbnIr9tm83rDEYyBryTFLmx4vL3lRrbbs5tNGHsn1axCTZhqu5inhkx2qMO/nD8bOtCMSOmq4LrwHptKB/Dn1g86CMQjBBSsROZC9GR0x7w8YqLuRqBzz837mPXfPLnMET9oNSLalMTpLgvQiUB2UkCkSkAqlngUl0e7fuCBdKS8Y5ARf0OpxnSsBaf37Xd5ToEkkznxxlg1PUIsoB0dcAQMLVsi4cQ69WJPYNemW0="
-
+    - secure: "KWXpNwAk9XP5YGWZ1MnIuiPZ/QLKzLQ0Njqx0nrtjuubqIF82n8Xr2eLN+N9sO7feeBU0+7EnrlNBFLrAuzy6hYMGHglUs1RjyDo2UyEKGd4vU0h5YyCnwXAL9hITPauWyUHhKcLIK7fg5tXtEebjKg3vB34zFDCIFnb1VRVTP6nh+ozAh99IcFxFzsg3rt29PwsW2JSZ6vsRJFQhZuesdG/rgVf+ZwWYR6VBNCUa29cAyOsjLnwRWAwQIehoRKa+DbC7NEXTiY8nKzXgi4CRXg6lg6p51iJYpJ6sJC7efA0X2UFltP+MWDi/9Ti1WpGHpFdiQ89QQWq36aRyvxABbaH+3fo1G5qBPBUdpojKY/Wm0iR5b8GIf3NhTiLnTVU8MyI29T7/DVaf1rxGciHQDIvvyQOE1UdR274D3xumxcHfZmnxBMq4Rhe9YLsD1hSh/1ISJwm5xTgUS9N0teTEMrcORwBRkUZVZyFbRGvK8EiJKD/Edzx3zZlS39DpYww+o05dQjlrPNfrWU1wwiNnZZYXbaz5BTKuuhnONL+wgLyalBKoeK4rUSwQsRebu7NfcwrwzAc3paW/32LdGK7l6Nc/C5xt2Doh1j0hL5w/X7K6hTgZc8erNqSljOtApU24f1U7JRWHQhLrKgaBOKqkVZ6ynFJ+pez6l2qCjiNGYs="
+        
 
 install:
   - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
@@ -27,7 +27,7 @@ script:
       cd docs;
       make html;
       cd ..;
-      python -m doctr deploy --key-path deploy_key.enc;
+      python -m doctr deploy --deploy-repo doctrtesting/doctrtesting.github.io;
     fi
 
   - if [[ "${TESTS}" == "true" ]]; then
