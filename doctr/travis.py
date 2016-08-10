@@ -118,7 +118,7 @@ def run(args):
     if returncode != 0:
         sys.exit(returncode)
 
-def get_repo():
+def get_current_repo():
     """
     Get the GitHub repo name for the current directory.
 
@@ -131,18 +131,25 @@ def get_repo():
     _, org, git_repo = remote_url.rsplit('.git', 1)[0].rsplit('/', 2)
     return (org + '/' + git_repo)
 
-def setup_GitHub_push(repo, auth_type='deploy_key', full_key_path='github_deploy_key.enc'):
+def setup_GitHub_push(deploy_repo, auth_type='deploy_key', full_key_path='github_deploy_key.enc'):
     """
     Setup the remote to push to GitHub (to be run on Travis).
 
     ``auth_type`` should be either ``'deploy_key'`` or ``'token'``.
 
     For ``auth_type='token'``, this sets up the remote with the token and
-    checks out the gh-pages branch. The token to push to GitHub is assumed to be in the ``GH_TOKEN`` environment
+    checks out the gh-pages branch.  If the ``deploy_repo`` is a github.io style page,
+    then the master branch is pushed to instead.
+    The token to push to GitHub is assumed to be in the ``GH_TOKEN`` environment
     variable.
 
     For ``auth_type='deploy_key'``, this sets up the remote with ssh access.
     """
+    if 'github.io' not in repo:
+        branch = 'gh-pages'
+    else:
+        branch = ''
+
     if auth_type not in ['deploy_key', 'token']:
         raise ValueError("auth_type must be 'deploy_key' or 'token'")
 
@@ -150,12 +157,12 @@ def setup_GitHub_push(repo, auth_type='deploy_key', full_key_path='github_deploy
     TRAVIS_PULL_REQUEST = os.environ.get("TRAVIS_PULL_REQUEST", "")
 
     if TRAVIS_BRANCH != "master":
-        print("The docs are only pushed to gh-pages from master", file=sys.stderr)
+        print("The docs are only pushed {} from master".format('to' + branch if branch), file=sys.stderr)
         print("This is the {TRAVIS_BRANCH} branch".format(TRAVIS_BRANCH=TRAVIS_BRANCH), file=sys.stderr)
         return False
 
     if TRAVIS_PULL_REQUEST != "false":
-        print("The website and docs are not pushed to gh-pages on pull requests", file=sys.stderr)
+        print("The website and docs are not pushed {} on pull requests".format('to' + branch if branch), file=sys.stderr)
         return False
 
     print("Setting git attributes")
@@ -166,28 +173,32 @@ def setup_GitHub_push(repo, auth_type='deploy_key', full_key_path='github_deploy
     if auth_type == 'token':
         token = get_token()
         run(['git', 'remote', 'add', 'doctr_remote',
-            'https://{token}@github.com/{repo}.git'.format(token=token.decode('utf-8'),
-                repo=repo)])
+            'https://{token}@github.com/{deploy_repo}.git'.format(token=token.decode('utf-8'),
+                deploy_repo=deploy_repo)])
     else:
         keypath, key_ext = full_key_path.rsplit('.', 1)
         key_ext = '.' + key_ext
         setup_deploy_key(keypath=keypath, key_ext=key_ext)
         run(['git', 'remote', 'add', 'doctr_remote',
-            'git@github.com:{repo}.git'.format(repo=repo)])
+            'git@github.com:{deploy_repo}.git'.format(deploy_repo=deploy_repo)])
 
     print("Fetching doctr remote")
     run(['git', 'fetch', 'doctr_remote'])
 
-    #create gh-pages empty branch with .nojekyll if it doesn't already exist
-    new_gh_pages = create_gh_pages()
-    print("Checking out gh-pages")
-    if new_gh_pages:
-        run(['git', 'checkout', 'gh-pages'])
-    else:
-        run(['git', 'checkout', '-b', 'gh-pages', '--track', 'doctr_remote/gh-pages'])
-    print("Done")
+    if branch:
+        #create gh-pages empty branch with .nojekyll if it doesn't already exist
+        new_gh_pages = create_gh_pages()
+        print("Checking out gh-pages")
+        if new_gh_pages:
+            run(['git', 'checkout', 'gh-pages'])
+        else:
+            run(['git', 'checkout', '-b', 'gh-pages', '--track', 'doctr_remote/gh-pages'])
+        print("Done")
 
-    return True
+        return True
+    else:
+        return True
+
 
 def gh_pages_exists():
     """
@@ -250,7 +261,7 @@ def commit_docs(*, built_docs='docs/_build/html', gh_pages_docs='docs', tmp_dir=
     os.rename(tmp_dir, gh_pages_docs)
     run(['git', 'add', '-A', gh_pages_docs])
 
-def push_docs():
+def push_docs(deploy_repo):
     """
     Push the changes to the `gh-pages` branch.
 
@@ -270,6 +281,9 @@ def push_docs():
         print("Pulling")
         run(["git", "pull"])
         print("Pushing commit")
-        run(['git', 'push', '-q', 'doctr_remote', 'gh-pages'])
+        if 'github.io' not in deploy_repo:
+            run(['git', 'push', '-q', 'doctr_remote', 'gh-pages'])
+        else:
+            run(['git', 'push', '-q', 'doctr_remote', 'master'])
     else:
         print("The docs have not changed. Not updating")
