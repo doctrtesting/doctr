@@ -108,7 +108,7 @@ def deploy(args, parser):
         'deploy_key', full_key_path=args.key_path):
         commit_docs(built_docs=args.built_docs,
             gh_pages_docs=args.gh_pages_docs, tmp_dir=args.tmp_dir)
-        push_docs()
+        push_docs(deploy_repo)
 
 class IncrementingInt:
     def __init__(self, i=0):
