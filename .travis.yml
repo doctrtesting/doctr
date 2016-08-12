@@ -6,7 +6,7 @@ env:
     - DOCS="true"
     - TESTS="true"
   global:
-    - secure: "lRNuFUVplsdD9P1g5ahPGT4sENcZ0Q5AB8iGm6/GWJ2QUoTZfbcPRTLj2XuYRK2Yi4QOoVSm/ZSxT2/GazvZNUUJxoIdclPTWjr5rRSRZrq1KOkipm3spyu9y5IuXwAeTykUzGnxijYJcdWeEQ5XyB6x+6AWtFmuTjkX35uXd8CH+ubYWmL/oqPwXgryuH47tnTT+AIpLSE9F4FTbvrM3RPwg4BBcSZ0qlieQKo21l0V1TvSIeTr8yK1F1HWQaOzBe2KFDHLVWv6kjw5I+ZXZIMRrhgFGYxJwdgIsNbZiKEpWo74XTb1Y+XYcXuh1erro5GkuOPsEUSvEPMiwYy58TS8G28h1sXidRO37EchsxSYJKymvSxz61AtLkuwhPtZNYehFt6kZWJpkd31KByEB8YlowvHotwFG7GxYjTBkAj98mRq87tFaTtYUFeY32rOlHbnIr9tm83rDEYyBryTFLmx4vL3lRrbbs5tNGHsn1axCTZhqu5inhkx2qMO/nD8bOtCMSOmq4LrwHptKB/Dn1g86CMQjBBSsROZC9GR0x7w8YqLuRqBzz837mPXfPLnMET9oNSLalMTpLgvQiUB2UkCkSkAqlngUl0e7fuCBdKS8Y5ARf0OpxnSsBaf37Xd5ToEkkznxxlg1PUIsoB0dcAQMLVsi4cQ69WJPYNemW0="
+    - secure: "Kf/8FAb2/TrOS+QYkWYzQKTuDTpaQawM7hD6coMuAWM6PvCGfsOANGNCizk4ke1DYgYEiggZD44Qm3R5RX4immPfkw1a/m5vhe+2PoW3X7kuDZTWqp9tVp5SdZw/OpcTYSHaswdhYhkhJWZNFC7hxtMDMQqDZDfyANUQkol8W6e4ftWXKRuwNAQehhs1s9ZtejKsNHXMUqv+tADrlPraoyhRuWXhdVaJNOYlUvQxUjYO1YpJ5vdmSJXkGm83RHzhAba8/O/kOQYUzu9gEZuJR087NC9y9P4KRoNXLLikMFTpVsvNZKZIRZMCe+pO+Nr73YPH7gKruGmGn7IUVN3pcvkcdYmUb5a/pgHCNXGvNWmhBZryKuBH/k9Ugu1FEzE+J77KMRIlEiRtHyfNdyMvqoRECRNoserh8l3nOkwTLSk/19Ofmvu6ZfXmyErtYw7T2Khr7utBcIV1kQQcmMxO8KxYBZqeRo3/IZuSqBIwCJxWNiRDJ8cr3VfpJiK+i/MlLhZFe4zFlwik5uyePq3orro6uMAySCd39QnHFfASbO4eE+2FR21i1KIs0wfBDkRDju4usUBXm+jh+gshBson+SKMz0f0SgNZlcIg3On0b3QHK/3bZxuorD4AaJtiCpnwWUctH60O2O+swbt1HKQ5KxF9BudT+HyKPfRct6GJ8l4="
 
 
 install:
@@ -27,7 +27,7 @@ script:
       cd docs;
       make html;
       cd ..;
-      python -m doctr deploy --key-path deploy_key.enc;
+      python -m doctr deploy --deploy-repo gforsyth/doctrdocs
     fi
 
   - if [[ "${TESTS}" == "true" ]]; then
