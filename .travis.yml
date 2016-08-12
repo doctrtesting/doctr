@@ -27,7 +27,7 @@ script:
       cd docs;
       make html;
       cd ..;
-      python -m doctr deploy --deploy-repo gforsyth/doctrdocs
+      python -m doctr deploy --deploy-repo gforsyth/doctrdocs;
     fi
 
   - if [[ "${TESTS}" == "true" ]]; then
